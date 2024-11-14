@@ -1,4 +1,4 @@
-# v0.1d
+# v0.1e
 import sys
 import os
 import os.path as path
@@ -155,7 +155,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
 if __name__ == '__main__':
     try:
         version = 0.1
-        utils.self_upgrade(version)
+        # utils.self_upgrade(version)
     except Exception as ex:
         pass
 
