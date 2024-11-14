@@ -77,7 +77,7 @@ def generate_remote_data_path(machine_type: str, group: str, machine_tag_str: st
 
     return remote_data_path_str
 
-def self_upgrade(version: float, url: str = 'https://github.com/yaotianran/upload_to_server_ng/archive/refs/heads/master.zip') -> int:
+def self_upgrade(version: float, url: str = 'https://github.com/yaotianran/upload_ng/archive/refs/heads/master.zip') -> int:
     '''
     silently upgrade
     '''
@@ -106,10 +106,10 @@ def self_upgrade(version: float, url: str = 'https://github.com/yaotianran/uploa
         print('upgrade: ', ex)
         return 1
 
-    file_replace_lst: list[tuple[str, str], ...] = [('upload_to_server-master\\upload.py', 'app\\upload.py'),
-                                                    ('upload_to_server-master\\upload.bat', 'upload.bat'),
-                                                    ('upload_to_server-master\\lib\\server.py', 'app\\lib\\server.py'),
-                                                    ('upload_to_server-master\\lib\\utils.py', 'app\\lib\\utils.py')
+    file_replace_lst: list[tuple[str, str], ...] = [('upload_ng-master\\upload.py', 'app\\upload.py'),
+                                                    ('upload_ng-master\\upload.bat', 'upload.bat'),
+                                                    ('upload_ng-master\\lib\\server.py', 'app\\lib\\server.py'),
+                                                    ('upload_ng-master\\lib\\utils.py', 'app\\lib\\utils.py')
                                                     ]
 
     for src, dst in file_replace_lst:
@@ -121,7 +121,7 @@ def self_upgrade(version: float, url: str = 'https://github.com/yaotianran/uploa
 
     try:
         os.remove('master.zip')
-        shutil.rmtree('upload_to_server-master')
+        shutil.rmtree('upload_ng-master')
     except Exception as ex:
         print('upgrade: ', ex)
         return 1
