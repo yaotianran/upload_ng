@@ -146,7 +146,11 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
             message = f'{path.basename(local_path_str)}，该上传目录下无Res，确定这是一个项目文件？'
             print(message)
         data_server.upload_a_folder(local_path_str, remote_folder_str, pattern = arguments_dict['pattern'])
-        _ = utils.send_message(machine_type_str, machine_tag_str, path.basename(local_path_str), remote_folder_str)
+        try:
+            _ = utils.send_message(machine_type_str, machine_tag_str, path.basename(local_path_str), remote_folder_str)
+        except Exception as ex:
+            print('send message: ', ex)
+
     print('\nDone')
 
     return
