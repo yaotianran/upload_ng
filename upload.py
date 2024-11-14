@@ -147,7 +147,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
             print(message)
         data_server.upload_a_folder(local_path_str, remote_folder_str, pattern = arguments_dict['pattern'])
         try:
-            _ = utils.send_message(machine_type_str, machine_tag_str, path.basename(local_path_str), remote_folder_str)
+            utils.send_message(machine_type_str, machine_tag_str, path.basename(local_path_str), remote_folder_str)
         except Exception as ex:
             print('send message: ', ex)
 
