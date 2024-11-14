@@ -83,7 +83,7 @@ def self_upgrade(version: float, url: str = 'https://github.com/yaotianran/uploa
     '''
 
     try:
-        get_response = requests.get(url, stream = True)
+        get_response = requests.get(url, stream = True, timeout = 5)
     except Exception as ex:
         print('upgrade: ', ex)
         return 1
