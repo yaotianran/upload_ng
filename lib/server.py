@@ -1,4 +1,4 @@
-# v0.1f
+# v0.2
 import sys
 import os.path as path
 import pathlib
