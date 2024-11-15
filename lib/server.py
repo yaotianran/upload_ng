@@ -78,7 +78,7 @@ class server:
 
            **private_key_file**: string
               如果使用私钥文件验证，填写这个选项，key文件为PEM格式。显然private_key_file和username不能都为‘’
-              公私钥文件对可用命令“ssh-keygen -m PEM -t rsa -f slg001_rsa”生成
+              公私钥文件对可用命令“ssh-keygen -m PEM -t rsa -f SLG001_rsa”生成
 
         Returns:
            **sftp_client**: paramiko.SFTPClient

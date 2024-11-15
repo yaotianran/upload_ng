@@ -153,7 +153,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
         except Exception as ex:
             print('send message: ', ex)
 
-    print('\nDone')
+    print('\n上传完毕，可以关闭本窗口。')
 
     return
 
