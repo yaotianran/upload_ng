@@ -1,4 +1,4 @@
-# v0.1g (master)
+# v0.1h (master)
 import sys
 import os
 import os.path as path
@@ -163,7 +163,7 @@ if __name__ == '__main__':
         version = 0.1
         r = utils.self_upgrade(version)
         if r == 0:
-            print('启动成功')
+            print('启动成功, 0.1h')
     except Exception as ex:
         pass
 

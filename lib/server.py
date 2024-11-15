@@ -1,4 +1,4 @@
-# v0.1g (master)
+# v0.1h (master)
 import sys
 import os.path as path
 import pathlib
@@ -64,6 +64,9 @@ class server:
         # current_percent_str = str(round(bytes_transferred / bytes_total * 100)) + '%'
 
         percent_str = str(round(bytes_transferred / bytes_total * 100)) + '%'
+
+        bytes_transferred = utils.count_to_unit(bytes_transferred)
+        bytes_total = utils.count_to_unit(bytes_total)
         print(f'{bytes_transferred}/{bytes_total} {percent_str}             ', end = '\r')
 
         return None
