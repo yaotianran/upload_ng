@@ -1,4 +1,4 @@
-# v0.1f
+# v0.1g (master)
 import requests
 import time
 import json
@@ -77,6 +77,7 @@ def generate_remote_data_path(machine_type: str, group: str, machine_tag_str: st
 
     return remote_data_path_str
 
+# 升级， 成功返回0, 不成功返回1
 def self_upgrade(version: float, url: str = 'https://github.com/yaotianran/upload_ng/archive/refs/heads/master.zip') -> int:
     '''
     silently upgrade
@@ -85,7 +86,7 @@ def self_upgrade(version: float, url: str = 'https://github.com/yaotianran/uploa
     try:
         get_response = requests.get(url, stream = True, timeout = 5)
     except Exception as ex:
-        print('upgrade: ', ex)
+        # print('upgrade: ', ex)
         return 1
 
     file_name = url.split("/")[-1]

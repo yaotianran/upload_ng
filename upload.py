@@ -1,4 +1,4 @@
-# v0.1g
+# v0.1g (master)
 import sys
 import os
 import os.path as path
@@ -161,7 +161,9 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
 if __name__ == '__main__':
     try:
         version = 0.1
-        utils.self_upgrade(version)
+        r = utils.self_upgrade(version)
+        if r == 0:
+            print('启动成功')
     except Exception as ex:
         pass
 
