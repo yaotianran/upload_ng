@@ -1,4 +1,4 @@
-# v0.1f
+# v0.1g
 import sys
 import os
 import os.path as path
@@ -128,6 +128,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     machine_type_str = arguments_dict['machine_type']
     username_str = arguments_dict['username']
 
+
     private_key_file = glob.glob('app\\*_rsa')[0]
     group_str = private_key_file[4:-4]
     print(group_str)
@@ -138,8 +139,8 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
 
     data_server = server(ip = '192.168.0.185')
     print('正在连接服务器192.168.0.185 ...')
-    data_server.generate_sftp_client(username = username_str, private_key_file = private_key_file)
     print(f'用户名： {username_str}  私钥文件： {private_key_file}')
+    data_server.generate_sftp_client(username = username_str, private_key_file = private_key_file)
     data_server.create_remote_folder(parent_folder = '/', child_folder = remote_folder_str)
 
     for local_path_str in local_path_lst:
