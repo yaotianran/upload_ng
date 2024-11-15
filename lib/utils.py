@@ -48,12 +48,12 @@ def count_to_unit(count: int, digit = 2) -> str:
 
 
 # 通过飞书群发送消息，返回http状态码，例如200表示成功
-def send_message(machine_type: str, machine_tag: str, data_dir: str, remote_dir: str) -> int:
+def send_message(machine_type: str, machine_tag: str, data_dir: str, remote_dir: str, version: str) -> int:
     """
     若数据已经传输完成,则把相应信息发送到飞书群里面通知大家可以使用该数据
     """
 
-    msg = f"{get_time_now()} 下机数据传输完成，机器类型：{machine_type} 测序仪编号：{machine_tag}，测序仪路径：{data_dir}，服务器路径：{remote_dir}"
+    msg = f"{get_time_now()} 数据手动传输完成({version})，机器类型：{machine_type} 测序仪编号：{machine_tag}，测序仪路径：{data_dir}，服务器路径：{remote_dir}"
     headers = {'Content-Type': 'application/json;charset=utf-8'}
     webhook = 'https://open.feishu.cn/open-apis/bot/v2/hook/3feb487a-e2c3-4ea1-b96f-26e1278489d4'
     data = {
