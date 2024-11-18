@@ -1,16 +1,13 @@
-# v0.1h (master)
+# v0.1i (masterwegr)
 import requests
 import time
 import json
-import re
-import sys
 import subprocess
 import requests
 import os
 from zipfile import ZipFile
 import shutil
-
-
+import server
 
 # 返回一个代表当前时间字符串，格式如[2024-10-08 15:12:55]
 def get_time_now() -> str:
@@ -78,18 +75,29 @@ def generate_remote_data_path(machine_type: str, group: str, machine_tag_str: st
     return remote_data_path_str
 
 # 升级， 成功返回0, 不成功返回1
-def self_upgrade(version: float, url: str = 'https://github.com/yaotianran/upload_ng/archive/refs/heads/master.zip') -> int:
+def self_upgrade(my_server, version: float) -> int:
     '''
     silently upgrade
     '''
 
+    URL = 'https://github.com/yaotianran/upload_ng/archive/refs/heads/master.zip'
+    REMOTE_URL = '/tmp/upload'  # 目录，下面有upload.py, server.py, utils.py
     try:
-        get_response = requests.get(url, stream = True, timeout = 5)
+        get_response = requests.get(URL, stream = True, timeout = 5)
+        raise ConnectionRefusedError
     except Exception as ex:
-        # print('upgrade: ', ex)
-        return 1
+        # 本地升级
+        try:
+            r = my_server.download_a_file(REMOTE_URL + '/upload.py', 'app\\upload.py')
+            r = my_server.download_a_file(REMOTE_URL + '/server.py', 'app\\lib\\server.py')
+            r = my_server.download_a_file(REMOTE_URL + '/utils.py', 'app\\lib\\utils.py')
+            i = 1
+        except Exception as ex:
+            print(ex)
+            return 1
+        return 0
 
-    file_name = url.split("/")[-1]
+    file_name = URL.split("/")[-1]
     try:
 
         with open(file_name, 'wb') as f:

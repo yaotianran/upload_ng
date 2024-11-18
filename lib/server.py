@@ -1,30 +1,19 @@
-# v0.1h (master)
+# v0.1i (mastet43trewter)
 import sys
 import os.path as path
 import pathlib
-import time
 import os
 import glob
 
 
 # -----------import customed packages here-------------
 import paramiko
-
-try:
-    from . import utils
-except:
-    pass
-
-try:
-    import utils
-except:
-    pass
-
+import utils
 
 # ---------------------------------------------------
 
 
-class server:
+class Server:
     '''
     properties:
 
@@ -224,6 +213,30 @@ class server:
 
         return
 
+    def download_a_file(self, remote_file, local_file) -> int:
+        '''
+        download a file, 成功返回0
+        '''
+
+        # 获取远端文件属性
+        try:
+            remote_file_stat = self.sftp_client.stat(remote_file)
+        except FileNotFoundError:
+            message = f'远端文件不存在 {remote_file}'
+            print(message)
+            return 1
+
+        # 获取本地文件属性
+        if not os.access(local_file, os.R_OK):
+            self.sftp_client.get(remote_file, local_file)
+            return 0
+
+        local_file_stat = os.stat(local_file)
+        if local_file_stat.st_size != remote_file_stat.st_size or remote_file_stat.st_mtime - local_file_stat.st_mtime > 0:  # 文件大小不一致或者remote文件较新
+            self.sftp_client.get(remote_file, local_file)
+
+        return 0
+
     def close(self) -> int:
         '''
         关闭server链接
@@ -240,9 +253,10 @@ if __name__ == '__main__':
 
     print('testing')
 
-    server = server(ip = '192.168.0.185')
-    server.generate_sftp_client(username = 'dtrans', private_key_file = '../test_id_rsa')
-    server.create_remote_folder('/share/data/salus/Pro/', 'group_001')
+    server = Server(ip = '192.168.0.185')
+    server.generate_sftp_client(username = 'slg000', private_key_file = '../keys_files/SLG000_rsa')
+    server.download_a_file(remote_file = '/tmp/tmp_read_resource_1681727341233295410.config', local_file = 'temp.txt')
+    # server.create_remote_folder('/share/data/salus/Pro/', 'group_001')
     # print(server.sftp_client.mkdir('/share/data/salus/Pro/test'))
     # print(server.sftp_client.normalize('/share/data/salus/Pro/test/'))
     # server.upload_a_file(local_file = 'd:\\Program Files.rar', remote_file = '/share/data/salus/Pro/test/Program Files.rar')
@@ -264,5 +278,5 @@ if __name__ == '__main__':
     # print(list(stdout))
 
     server.close()
-    i = 1
+    print('Done')
     # server.print_progress(bytes_transferred = 14346673, bytes_total = 100000000)

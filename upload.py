@@ -1,18 +1,18 @@
-# v0.1h (master)
+# v0.1i (masterwgerh)
 import sys
 import os
 import os.path as path
 import glob
 
 sys.path.append('app\\lib')
+# sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-sys.path.pop(0)
-version = 'v0.1h'
+version = 'v0.1i'
 
 import requests
 import paramiko
 
-from server import server
+import server
 import utils
 
 arguments_dict = {}
@@ -123,26 +123,38 @@ def get_arguments() -> dict:
     return None
 
 
+def connect_server(ip: str, username: str, private_key_file: str) -> server.Server:
+
+    print('正在连接服务器...')
+    print(f'IP: {ip}\nusername: {username}\nprivate key: {private_key_file}')
+
+    data_server = server.Server(ip = ip)
+    data_server.generate_sftp_client(username = username, private_key_file = private_key_file)
+
+    return data_server
+
 def main(argvList = sys.argv, argv_int = len(sys.argv)):
     local_path_lst = arguments_dict['local_path']
     machine_tag_str = arguments_dict['machine_tag']
     machine_type_str = arguments_dict['machine_type']
     username_str = arguments_dict['username']
 
-
+    #
     private_key_file = glob.glob('app\\*_rsa')[0]
-    group_str = private_key_file[4:-4]
-    print(group_str)
+    remote_folder_str = utils.generate_remote_data_path(machine_type_str, private_key_file[4:-4], machine_tag_str)
 
 
-    remote_folder_str = utils.generate_remote_data_path(machine_type_str, group_str, machine_tag_str)
-    print('服务器数据上传路径： ', remote_folder_str)
+    data_server = connect_server('192.168.0.185', username_str, private_key_file)
+    try:
+        r = utils.self_upgrade(data_server, version)
+        # r = 1
+        if r == 0:
+            print(f'连接成功, {version}')
+    except Exception as ex:
+        pass
 
-    data_server = server(ip = '192.168.0.185')
-    print('正在连接服务器192.168.0.185 ...')
-    print(f'用户名： {username_str}  私钥文件： {private_key_file}')
-    data_server.generate_sftp_client(username = username_str, private_key_file = private_key_file)
     data_server.create_remote_folder(parent_folder = '/', child_folder = remote_folder_str)
+    print('服务器数据上传路径： ', remote_folder_str)
 
     for local_path_str in local_path_lst:
         if 'Res' not in os.listdir(local_path_str) and 'Res1' not in os.listdir(local_path_str):
@@ -154,21 +166,14 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
         except Exception as ex:
             print('send message: ', ex)
 
+    data_server.close()
     print('\n上传完毕，可以关闭本窗口。')
 
     return
 
 
 if __name__ == '__main__':
-    try:
-        r = utils.self_upgrade(version)
-        if r == 0:
-            print('启动成功, 0.1h')
-    except Exception as ex:
-        pass
-
     r = get_arguments()
-    print(arguments_dict)
     main()
 
 
