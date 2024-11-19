@@ -1,13 +1,14 @@
-# v0.1i (masterwgerh)
+# v0.1i1 (master)
 import sys
 import os
 import os.path as path
 import glob
+import socket
 
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1i'
+version = 'v0.1i1'
 
 import requests
 import paramiko
@@ -125,6 +126,10 @@ def get_arguments() -> dict:
 
 def connect_server(ip: str, username: str, private_key_file: str) -> server.Server:
 
+    hostname = socket.gethostname()
+    IPAddr = socket.gethostbyname_ex(hostname)[2]
+
+    print(f'主机名：{hostname}, IP: {IPAddr}')
     print('正在连接服务器...')
     print(f'IP: {ip}\nusername: {username}\nprivate key: {private_key_file}')
 

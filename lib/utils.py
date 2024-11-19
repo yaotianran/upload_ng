@@ -1,4 +1,4 @@
-# v0.1i (masterwegr)
+# v0.1i1 (masterwegr)
 import requests
 import time
 import json
