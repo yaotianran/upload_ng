@@ -1,14 +1,13 @@
-# v0.1i1 (master)
+# v0.1i (master)
 import sys
 import os
 import os.path as path
 import glob
-import socket
 
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1i1'
+version = 'v0.1h'
 
 import requests
 import paramiko
@@ -126,10 +125,6 @@ def get_arguments() -> dict:
 
 def connect_server(ip: str, username: str, private_key_file: str) -> server.Server:
 
-    hostname = socket.gethostname()
-    IPAddr = socket.gethostbyname_ex(hostname)[2]
-
-    print(f'主机名：{hostname}, IP: {IPAddr}')
     print('正在连接服务器...')
     print(f'IP: {ip}\nusername: {username}\nprivate key: {private_key_file}')
 
@@ -150,6 +145,14 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
 
 
     data_server = connect_server('192.168.0.185', username_str, private_key_file)
+    try:
+        r = utils.self_upgrade(data_server, version)
+        # r = 1
+        if r == 0:
+            print(f'连接成功, {version}')
+    except Exception as ex:
+        pass
+
     data_server.create_remote_folder(parent_folder = '/', child_folder = remote_folder_str)
     print('服务器数据上传路径： ', remote_folder_str)
 

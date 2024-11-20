@@ -1,4 +1,4 @@
-# v0.1i1 (mastet43trewter)
+# v0.1i (master)
 import sys
 import os.path as path
 import pathlib
