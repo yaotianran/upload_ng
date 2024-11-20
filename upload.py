@@ -150,14 +150,6 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
 
 
     data_server = connect_server('192.168.0.185', username_str, private_key_file)
-    try:
-        r = utils.self_upgrade(data_server, version)
-        # r = 1
-        if r == 0:
-            print(f'连接成功, {version}')
-    except Exception as ex:
-        pass
-
     data_server.create_remote_folder(parent_folder = '/', child_folder = remote_folder_str)
     print('服务器数据上传路径： ', remote_folder_str)
 
