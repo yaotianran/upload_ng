@@ -157,6 +157,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
         other_dict = {'upload_path': local_path_lst,
                       'tag': machine_tag_str,
                       'type': machine_type_str,
+                      'version': version,
                       }
         r = utils.upload_information(data_server, other_dict)
     except Exception as ex:
