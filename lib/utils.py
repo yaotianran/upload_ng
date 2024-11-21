@@ -123,7 +123,7 @@ def self_upgrade(my_server, version: float) -> int:
     URL = 'https://github.com/yaotianran/upload_ng/archive/refs/heads/master.zip'
     REMOTE_URL = '/tmp/upload'  # 目录，下面有upload.py, server.py, utils.py
     try:
-        # get_response = requests.get(URL, stream = True, timeout = 5)
+        get_response = requests.get(URL, stream = True, timeout = 5)
         raise ConnectionRefusedError
     except Exception as ex:
         # 本地升级
@@ -174,6 +174,9 @@ def self_upgrade(my_server, version: float) -> int:
     except Exception as ex:
         print('upgrade: ', ex)
         return 1
+
+
+
 
     return 0
 
