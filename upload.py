@@ -1,4 +1,4 @@
-# v0.1j (master)
+# v0.1j1 (master)
 import sys
 import os
 import os.path as path
@@ -7,7 +7,7 @@ import glob
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1j'
+version = 'v0.1j1'
 
 import requests
 import paramiko
