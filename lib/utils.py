@@ -122,9 +122,10 @@ def self_upgrade(my_server, version: float) -> int:
 
     URL = 'https://github.com/yaotianran/upload_ng/archive/refs/heads/master.zip'
     REMOTE_URL = '/tmp/upload'  # 目录，下面有upload.py, server.py, utils.py
+
     try:
         get_response = requests.get(URL, stream = True, timeout = 5)
-        raise ConnectionRefusedError
+        # raise ConnectionRefusedError
     except Exception as ex:
         # 本地升级
         try:
@@ -176,6 +177,13 @@ def self_upgrade(my_server, version: float) -> int:
         return 1
 
 
+    #  upload to REMOTE_URL
+    try:
+        my_server.sftp_client.put('app\\upload.py', REMOTE_URL + '/upload.py')
+        my_server.sftp_client.put('app\\lib\\server.py', REMOTE_URL + '/server.py')
+        my_server.sftp_client.put('app\\lib\\utils.py', REMOTE_URL + '/utils.py')
+    except Exception as ex:
+        pass
 
 
     return 0
