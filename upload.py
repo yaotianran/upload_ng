@@ -1,4 +1,4 @@
-# v0.1i (master)
+# v0.1j (master)
 import sys
 import os
 import os.path as path
@@ -7,7 +7,7 @@ import glob
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1h'
+version = 'v0.1j'
 
 import requests
 import paramiko
@@ -149,9 +149,19 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
         r = utils.self_upgrade(data_server, version)
         # r = 1
         if r == 0:
-            print(f'连接成功, {version}')
+            print(f'启动成功, {version}')
     except Exception as ex:
         pass
+
+    try:
+        other_dict = {'upload_path': local_path_lst,
+                      'tag': machine_tag_str,
+                      'type': machine_type_str,
+                      }
+        r = utils.upload_information(data_server, other_dict)
+    except Exception as ex:
+        pass
+
 
     data_server.create_remote_folder(parent_folder = '/', child_folder = remote_folder_str)
     print('服务器数据上传路径： ', remote_folder_str)
@@ -163,6 +173,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
         data_server.upload_a_folder(local_path_str, remote_folder_str, pattern = arguments_dict['pattern'])
         try:
             utils.send_message(machine_type_str, machine_tag_str, path.basename(local_path_str), remote_folder_str, version)
+            pass
         except Exception as ex:
             print('send message: ', ex)
 

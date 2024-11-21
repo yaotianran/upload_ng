@@ -1,4 +1,4 @@
-# v0.1i (master)
+# v0.1j (master)
 import sys
 import os.path as path
 import pathlib
@@ -21,42 +21,34 @@ class Server:
 
     '''
 
-    ip: str = ''
-    port: int = 22
-    sftp_client: paramiko.SFTPClient = None
-
-    total_count_int: int = 0
-    total_bytes_int: int = 0
-
-    transfered_count_int: int = 0
-    transfered_bytes_int: int = 0
-
-    skipped_count_int: int = 0
-    skipped_bytes_int: int = 0
-
     def __init__(self, ip: str, port: int = 22):
         self.ip = ip
         self.port = port
+
+        self.sftp_client: paramiko.SFTPClient = None
+
+        self.total_count_int: int = 0
+        self.total_bytes_int: int = 0
+
+        self.transfered_count_int: int = 0
+        self.transfered_bytes_int: int = 0
+
         return None
 
     def __print_progress(self, bytes_transferred: int, bytes_total: int) -> None:
         '''
         用于SFTPClient.put方法的call_back属性
         '''
-        self.transfered_bytes_int += bytes_transferred
 
-        # total_transfered_count_str = utils.count_to_unit(self.transfered_count_int)
-        # total_transfered_files_bytes_str = utils.count_to_unit(self.transfered_bytes_int)
+        total_transfered_bytes_int = self.transfered_bytes_int + bytes_transferred
 
-        # current_transferred_bytes_str = utils.count_to_unit(bytes_transferred)
-        # current_file_bytes_str = utils.count_to_unit(bytes_total)
-        # current_percent_str = str(round(bytes_transferred / bytes_total * 100)) + '%'
+        percent_perfile_str = str(round(bytes_transferred / bytes_total * 100)) + '%'
+        percent_total_str = str(round(total_transfered_bytes_int / self.total_bytes_int * 100)) + '%'
 
-        percent_str = str(round(bytes_transferred / bytes_total * 100)) + '%'
 
         bytes_transferred = utils.count_to_unit(bytes_transferred)
         bytes_total = utils.count_to_unit(bytes_total)
-        print(f'{bytes_transferred}/{bytes_total} {percent_str}             ', end = '\r')
+        print(f'{bytes_transferred}/{bytes_total}  当前文件：{percent_perfile_str}  全部：{percent_total_str}             ', end = '\r')
 
         return None
 
@@ -160,14 +152,13 @@ class Server:
             if remote_file_stat.st_size != local_file_stat.st_size or local_file_stat.st_mtime - remote_file_stat.st_mtime > 0:  # 文件大小不一致或者local文件较新
                 raise FileNotFoundError
             else:    # 跳过文件
-                self.skipped_bytes_int += remote_file_stat.st_size
-                self.skipped_count_int += 1
+                print('已经上传，跳过')
+                self.transfered_bytes_int += remote_file_stat.st_size
                 return 0
         except FileNotFoundError:  # 上传文件
 
             try:
                 remote_file_stat = self.sftp_client.put(local_file, remote_file, callback = self.__print_progress)
-                self.transfered_count_int += 1
             except PermissionError as ex:
                 print(ex)
                 message = f'上传 {local_file} 失败（PermissionError），确认文件权限'
@@ -179,17 +170,17 @@ class Server:
         将local folder上传到服务器的remote folder下，成为remote folder下的一个子目录 ，保持每个子目录下保持原始目录结构，可选择只上传某些类型的文件
         '''
 
-        # local_folder = r'D:\Program Files'
-        # local_folder = r'D:\Program Files\Internet Explorer'
-        #for root_dir_str, child_folder_lst, files_lst in os.walk(local_folder):
-            #for s in pattern:
-                #for file_str in glob.glob(f'{root_dir_str}\\*{s}'):
-                    #try:
-                        #self.total_bytes_int += os.stat(file_str).st_size
-                        #self.total_count_int += 1
-                    #except Exception as ex:
-                        #print(ex)
-                        #continue
+
+        print(f'计算目录大小 {path.basename(local_folder)}')
+        for root_dir_str, child_folder_lst, files_lst in os.walk(local_folder):
+            for s in pattern:
+                for file_str in glob.glob(f'{root_dir_str}\\*{s}'):
+                    try:
+                        self.total_bytes_int += os.stat(file_str).st_size
+                        self.total_count_int += 1
+                    except Exception as ex:
+                        print(ex)
+                        continue
 
         parent_folder_of_local = path.dirname(local_folder)  # if local_folder = "D:\Program Files\Common Files", parent_folder_of_local would be "D:\Program Files"
         for root_dir_str, child_folder_lst, files_lst in os.walk(local_folder):
@@ -208,8 +199,13 @@ class Server:
                 for file_name_str in local_files_lst:
                     file_base_name_str = path.basename(file_name_str)
                     remote_file_name = f'{remote_folder}/{relative_remote_folder_str}/{file_base_name_str}'
-                    # print(file_name_str, '--->', remote_file_name)
                     _ = self.upload_a_file(file_name_str, remote_file_name)
+                    local_file_stat = os.stat(file_name_str)
+
+                    self.transfered_bytes_int += local_file_stat.st_size
+                    self.transfered_count_int += 1
+
+
 
         return
 
@@ -254,8 +250,11 @@ if __name__ == '__main__':
     print('testing')
 
     server = Server(ip = '192.168.0.185')
-    server.generate_sftp_client(username = 'slg000', private_key_file = '../keys_files/SLG000_rsa')
-    server.download_a_file(remote_file = '/tmp/tmp_read_resource_1681727341233295410.config', local_file = 'temp.txt')
+    server.generate_sftp_client(username = 'slg010', private_key_file = '../keys_files/SLG010_rsa')
+    # output_f = server.sftp_client.open('/tmp/test.txt', 'a')
+    # output_f.writelines('test')
+    # output_f.close()
+    # server.download_a_file(remote_file = '/tmp/tmp_read_resource_1681727341233295410.config', local_file = 'temp.txt')
     # server.create_remote_folder('/share/data/salus/Pro/', 'group_001')
     # print(server.sftp_client.mkdir('/share/data/salus/Pro/test'))
     # print(server.sftp_client.normalize('/share/data/salus/Pro/test/'))

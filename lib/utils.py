@@ -1,4 +1,4 @@
-# v0.1i (master)
+# v0.1j (master)
 import requests
 import time
 import json
@@ -7,7 +7,47 @@ import requests
 import os
 from zipfile import ZipFile
 import shutil
+import socket
 import server
+
+# 收集机器信息，
+def upload_information(my_server, other: dict) -> dict:
+
+    r = 1
+    try:
+
+        hostname = socket.gethostname()
+        ip_list = socket.gethostbyname_ex(hostname)[2]
+
+        machine_UUID = subprocess.check_output('wmic csproduct get uuid').decode().split('\n')[1].strip()
+        machine_serialnumber = subprocess.check_output("wmic bios get serialnumber").decode().split()[1]
+
+        username = os.getlogin()
+
+        if 'tag' in other.keys():
+            file_name = f"{other['tag']}.txt"
+        else:
+            file_name = machine_UUID.split('-')[4] + '.txt'
+
+        with my_server.sftp_client.open(f'/tmp/{file_name}', 'a') as out_f:
+            out_f.writelines(f"================={get_time_now()}=================\n")
+            out_f.writelines(f"hostname:{hostname}\n")
+            out_f.writelines(f"ip:{ip_list}\n")
+            out_f.writelines(f"uuid:{machine_UUID}\n")
+            out_f.writelines(f"sn:{machine_serialnumber}\n")
+            out_f.writelines(f"username:{username}\n")
+            for key, value in other.items():
+                out_f.writelines(f"{key}:{value}\n")
+
+            out_f.writelines("\n")
+            out_f.writelines("\n")
+
+        r = 0
+
+    except Exception as ex:
+        pass
+
+    return r
 
 # 返回一个代表当前时间字符串，格式如[2024-10-08 15:12:55]
 def get_time_now() -> str:
