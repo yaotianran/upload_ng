@@ -110,7 +110,8 @@ def generate_remote_data_path(machine_type: str, group: str, machine_tag_str: st
 
     machine_UUID = subprocess.check_output('wmic csproduct get uuid').decode().split('\n')[1].strip()
     machine_UUID = machine_UUID.split('-')[4]
-    remote_data_path_str = f'{remote_root}/{machine_type}/{group}/{machine_tag_str}_{machine_UUID}/'
+    # remote_data_path_str = f'{remote_root}/{machine_type}/{group}/{machine_tag_str}_{machine_UUID}/'
+    remote_data_path_str = f'{remote_root}/{machine_type}/{group}/{machine_tag_str}/'
 
     return remote_data_path_str
 
