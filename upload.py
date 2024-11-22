@@ -1,4 +1,4 @@
-# v0.1j1 (master)
+# v0.1j2 (master)
 import sys
 import os
 import os.path as path
@@ -7,7 +7,7 @@ import glob
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1j1'
+version = 'v0.1j2'
 
 import requests
 import paramiko
@@ -147,9 +147,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     data_server = connect_server('192.168.0.185', username_str, private_key_file)
     try:
         r = utils.self_upgrade(data_server, version)
-        # r = 1
-        if r == 0:
-            print(f'启动成功, {version}')
+        print(r)
     except Exception as ex:
         pass
 
@@ -158,8 +156,10 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
                       'tag': machine_tag_str,
                       'type': machine_type_str,
                       'version': version,
+                      'group': private_key_file[4:-4],
                       }
         r = utils.upload_information(data_server, other_dict)
+        print(r)
     except Exception as ex:
         pass
 

@@ -1,4 +1,4 @@
-# v0.1j1 (master)
+# v0.1j2 (master)
 import requests
 import time
 import json
@@ -8,6 +8,7 @@ import os
 from zipfile import ZipFile
 import shutil
 import socket
+import stat
 import server
 
 # 收集机器信息，
@@ -24,8 +25,8 @@ def upload_information(my_server, other: dict) -> dict:
 
         username = os.getlogin()
 
-        if 'tag' in other.keys():
-            file_name = f"{other['tag']}.txt"
+        if 'group' in other.keys():
+            file_name = f"{other['group']}.txt"
         else:
             file_name = machine_UUID.split('-')[4] + '.txt'
 
@@ -45,7 +46,7 @@ def upload_information(my_server, other: dict) -> dict:
         r = 0
 
     except Exception as ex:
-        pass
+        print(ex)
 
     return r
 
@@ -183,6 +184,11 @@ def self_upgrade(my_server, version: float) -> int:
         my_server.sftp_client.put('app\\upload.py', REMOTE_URL + '/upload.py')
         my_server.sftp_client.put('app\\lib\\server.py', REMOTE_URL + '/server.py')
         my_server.sftp_client.put('app\\lib\\utils.py', REMOTE_URL + '/utils.py')
+
+        my_server.chmod(REMOTE_URL + '/upload.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
+        my_server.chmod(REMOTE_URL + '/server.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
+        my_server.chmod(REMOTE_URL + '/utils.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
+
     except Exception as ex:
         pass
 
