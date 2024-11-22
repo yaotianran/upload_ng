@@ -127,7 +127,6 @@ def self_upgrade(my_server, version: float) -> int:
 
     try:
         get_response = requests.get(URL, stream = True, timeout = 5)
-        # raise ConnectionRefusedError
     except Exception as ex:
         # 本地升级
         try:
@@ -185,9 +184,9 @@ def self_upgrade(my_server, version: float) -> int:
         my_server.sftp_client.put('app\\lib\\server.py', REMOTE_URL + '/server.py')
         my_server.sftp_client.put('app\\lib\\utils.py', REMOTE_URL + '/utils.py')
 
-        my_server.chmod(REMOTE_URL + '/upload.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
-        my_server.chmod(REMOTE_URL + '/server.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
-        my_server.chmod(REMOTE_URL + '/utils.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
+        my_server.sftp_client.chmod(REMOTE_URL + '/upload.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
+        my_server.sftp_client.chmod(REMOTE_URL + '/server.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
+        my_server.sftp_client.chmod(REMOTE_URL + '/utils.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
 
     except Exception as ex:
         pass
