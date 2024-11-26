@@ -179,7 +179,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
             print('send message: ', ex)
 
     data_server.close()
-    print('\n上传完毕，可以关闭本窗口。')
+    print(f'\n数据已上传至{remote_folder_str}，可以关闭本窗口。')
 
     return
 
