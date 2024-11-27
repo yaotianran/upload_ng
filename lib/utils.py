@@ -32,13 +32,13 @@ def upload_information(my_server, other: dict) -> dict:
 
         with my_server.sftp_client.open(f'/tmp/{file_name}', 'a') as out_f:
             out_f.writelines(f"================={get_time_now()}=================\n")
-            out_f.writelines(f"hostname:{hostname}\n")
-            out_f.writelines(f"ip:{ip_list}\n")
-            out_f.writelines(f"uuid:{machine_UUID}\n")
-            out_f.writelines(f"sn:{machine_serialnumber}\n")
-            out_f.writelines(f"username:{username}\n")
+            out_f.writelines(f"hostname: {hostname}\n")
+            out_f.writelines(f"ip: {ip_list}\n")
+            out_f.writelines(f"uuid: {machine_UUID}\n")
+            out_f.writelines(f"sn: {machine_serialnumber}\n")
+            out_f.writelines(f"username: {username}\n")
             for key, value in other.items():
-                out_f.writelines(f"{key}:{value}\n")
+                out_f.writelines(f"{key}: {value}\n")
 
             out_f.writelines("\n")
             out_f.writelines("\n")
