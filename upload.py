@@ -1,4 +1,4 @@
-# v0.1j5 (master)
+# v0.1j6 (master)
 import sys
 import os
 import os.path as path
@@ -7,7 +7,7 @@ import glob
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1j5'
+version = 'v0.1j6'
 
 import requests
 import paramiko
@@ -151,6 +151,8 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     try:
         return_code, return_message = utils.self_upgrade(data_server, version)
     except Exception as ex:
+        return_code = 99
+        return_message = '未知错误'
         pass
 
     try:
