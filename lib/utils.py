@@ -133,11 +133,10 @@ def self_upgrade(my_server, version: float) -> int:
             my_server.download_a_file(REMOTE_URL + '/upload.py', 'app\\upload.py')
             my_server.download_a_file(REMOTE_URL + '/server.py', 'app\\lib\\server.py')
             my_server.download_a_file(REMOTE_URL + '/utils.py', 'app\\lib\\utils.py')
-            i = 1
+            return 0
         except Exception as ex:
             print(ex)
             return 1
-        return 0
 
     file_name = URL.split("/")[-1]
     try:

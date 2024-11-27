@@ -27,6 +27,9 @@ def get_arguments() -> dict:
     if os.access('machine.ini', os.R_OK):
         with open('machine.ini', 'rt') as in_f:
             for line_str in in_f:
+                if line_str.strip() == '' or line_str.startswith('#'):
+                    continue
+
                 line_lst = line_str.split()
                 arguments_dict[line_lst[0]] = line_lst[1]
 
