@@ -147,8 +147,10 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     data_server = connect_server('192.168.0.185', username_str, private_key_file)
     try:
         r = utils.self_upgrade(data_server, version)
+        ex = ''
         print(r)
     except Exception as ex:
+        r = 1
         pass
 
     try:
@@ -157,6 +159,8 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
                       'type': machine_type_str,
                       'version': version,
                       'group': private_key_file[4:-4],
+                      'upgrade': r,
+                      'Exception': ex,
                       }
         r = utils.upload_information(data_server, other_dict)
         print(r)
