@@ -1,4 +1,4 @@
-# v0.1j3 (master)
+# v0.1j4 (master)
 import sys
 import os
 import os.path as path
@@ -7,7 +7,7 @@ import glob
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1j3'
+version = 'v0.1j4'
 
 import requests
 import paramiko
@@ -164,6 +164,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
                       'group': private_key_file[4:-4],
                       'upgrade': r,
                       'Exception': ex,
+                      'script': print(path.abspath(argvList[0])),
                       }
         r = utils.upload_information(data_server, other_dict)
         print(r)
