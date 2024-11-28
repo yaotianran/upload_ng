@@ -1,4 +1,4 @@
-# v0.1j6 (master)
+# v0.1j7 (master)
 import requests
 import time
 import json

@@ -1,4 +1,4 @@
-# v0.1j6 (master)
+# v0.1j7 (master)
 import sys
 import os.path as path
 import pathlib

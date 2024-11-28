@@ -1,4 +1,4 @@
-# v0.1j6 (master)
+# v0.1j7 (master)
 import sys
 import os
 import os.path as path
@@ -7,7 +7,7 @@ import glob
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1j6'
+version = 'v0.1j7'
 
 import requests
 import paramiko
@@ -150,6 +150,9 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     data_server = connect_server('192.168.0.185', username_str, private_key_file)
     try:
         return_code, return_message = utils.self_upgrade(data_server, version)
+        # return_code = -1
+        # return_message = ''
+        ex = ''
     except Exception as ex:
         return_code = 99
         return_message = '未知错误'
@@ -164,12 +167,13 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
                       'upgrade': return_code,
                       'message': return_message,
                       'exception': str(ex),
-                      'script': print(path.abspath(argvList[0])),
+                      'script': path.abspath(argvList[0]),
                       }
         r = utils.upload_information(data_server, other_dict)
         print(r)
     except Exception as ex:
-        pass
+        print('upload_information: ', ex)
+
 
 
     data_server.create_remote_folder(parent_folder = '/', child_folder = remote_folder_str)
