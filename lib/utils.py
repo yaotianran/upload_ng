@@ -127,7 +127,7 @@ def self_upgrade(my_server, version: float) -> tuple[int, str]:
     REMOTE_URL = '/tmp/upload'  # 目录，下面有upload.py, server.py, utils.py
 
     try:
-        get_response = requests.get(URL, stream = True, timeout = 5)
+        get_response = requests.get(URL, stream = True, timeout = 10)
     except Exception as ex:
         # 本地升级
         try:

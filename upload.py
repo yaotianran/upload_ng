@@ -153,6 +153,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
 
 
     data_server = connect_server('192.168.0.185', username_str, private_key_file)
+
     try:
         return_code, return_message = utils.self_upgrade(data_server, version)
         # return_code = -1
