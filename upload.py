@@ -4,7 +4,6 @@ import os
 import os.path as path
 import glob
 import socket
-import paramiko
 
 sys.path.append('app\\lib')
 # sys.path.append('lib')

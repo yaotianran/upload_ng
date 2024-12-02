@@ -135,6 +135,7 @@ def self_upgrade(my_server, version: float) -> tuple[int, str]:
             my_server.download_a_file(REMOTE_URL + '/server.py', 'app\\lib\\server.py')
             my_server.download_a_file(REMOTE_URL + '/utils.py', 'app\\lib\\utils.py')
             return 0, str(ex) + '   ' + '远程升级失败，本地升级成功'
+
         except Exception as ex:
             return 1, str(ex) + '   ' + '远程升级失败，本地升级失败'
 
