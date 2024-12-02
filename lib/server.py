@@ -1,4 +1,4 @@
-# v0.1j8 (master)
+# v0.1j9 (master)
 import sys
 import os.path as path
 import pathlib
@@ -250,7 +250,7 @@ if __name__ == '__main__':
     print('testing')
 
     server = Server(ip = '192.168.0.185')
-    server.generate_sftp_client(username = 'slg010', private_key_file = '../keys_files/SLG010_rsa')
+    server.generate_sftp_client(username = 'slg010', private_key_file = '../SLG010_rsa')
     # output_f = server.sftp_client.open('/tmp/test.txt', 'a')
     # output_f.writelines('test')
     # output_f.close()

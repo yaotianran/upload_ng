@@ -1,14 +1,15 @@
-# v0.1j8 (master)
+# v0.1j9 (master)
 import sys
 import os
 import os.path as path
 import glob
 import socket
+import paramiko
 
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1j8'
+version = 'v0.1j9'
 
 import requests
 import paramiko
@@ -129,15 +130,21 @@ def get_arguments() -> dict:
 
 def connect_server(ip: str, username: str, private_key_file: str) -> server.Server:
 
+
     hostname = socket.gethostname()
     ip_list = socket.gethostbyname_ex(hostname)[2]
 
     print('正在连接服务器...')
-    print(f'IP: {ip}\nusername: {username}\nprivate key: {private_key_file}')
+    print(f'IP: {ip}\nusername: {username}\nprivate key file: {private_key_file}')
     print(ip_list)
 
     data_server = server.Server(ip = ip)
-    data_server.generate_sftp_client(username = username, private_key_file = private_key_file)
+
+    try:
+        data_server.generate_sftp_client(username = username, private_key_file = private_key_file)
+    except paramiko.ssh_exception.AuthenticationException:
+        print('登录服务器失败，联系管理员')
+        sys.exit(1)
 
     return data_server
 

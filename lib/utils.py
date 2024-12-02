@@ -1,4 +1,4 @@
-# v0.1j8 (master)
+# v0.1j9 (master)
 import requests
 import time
 import json
@@ -172,8 +172,15 @@ def self_upgrade(my_server, version: float) -> tuple[int, str]:
     except Exception as ex:
         return 5, str(ex) + '   ' + f'删除zip失败'
 
+    # delete old files
+    try:
+        my_server.sftp_client.remove(REMOTE_URL + '/upload.py')
+        my_server.sftp_client.remove(REMOTE_URL + '/server.py')
+        my_server.sftp_client.remove(REMOTE_URL + '/utils.py')
+    except Exception as ex:
+        pass
 
-    #  upload to REMOTE_URL
+    # upload to REMOTE_URL
     try:
         my_server.sftp_client.put('app\\upload.py', REMOTE_URL + '/upload.py')
         my_server.sftp_client.put('app\\lib\\server.py', REMOTE_URL + '/server.py')
