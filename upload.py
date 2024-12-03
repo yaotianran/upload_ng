@@ -5,6 +5,7 @@ import os.path as path
 import re
 import glob
 import socket
+import getpass
 
 sys.path.append('app\\lib')
 # sys.path.append('lib')
@@ -135,7 +136,7 @@ def connect_server(ip: str, username: str, private_key_file: str) -> server.Serv
 
     hostname = socket.gethostname()
     ip_list = socket.gethostbyname_ex(hostname)[2]
-    username = os.getlogin()
+    username = getpass.getuser()
 
     print('正在连接服务器...')
     print(f'IP: {ip}\nusername: {username}\nprivate key file: {private_key_file}')
