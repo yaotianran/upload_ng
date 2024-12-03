@@ -139,7 +139,7 @@ class Server:
 
         time_str = utils.get_time_now()
         print()
-        print(f'\n{time_str}\n{local_file}\n--->\n{remote_file}')
+        print(f'\n{time_str}\n本地端：{local_file}\n--->\n服务器：{remote_file}')
 
         try:
             local_file_stat = os.stat(local_file)
