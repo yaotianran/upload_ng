@@ -1,14 +1,15 @@
-# v0.1j10 (master)
+# v0.1k (master)
 import sys
 import os
 import os.path as path
+import re
 import glob
 import socket
 
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1j10'
+version = 'v0.1k'
 
 import requests
 import paramiko
@@ -98,8 +99,10 @@ def get_arguments() -> dict:
                 print("第四步：输入测序仪编号，例如C2201010004")
                 machine_tag_str = input('>')
 
-            if machine_tag_str.strip() != '':
+            if machine_tag_str.strip() != '' and re.search(r'^[0-9a-zA-Z_]{1,}$', machine_tag_str) is not None:
                 break
+            else:
+                print(f"测序仪编号不能为空，且只能由字母，数字和下划线构成，现在是{machine_tag_str}，重新输入")
 
         arguments_dict['machine_tag'] = machine_tag_str.strip()
 
@@ -132,16 +135,20 @@ def connect_server(ip: str, username: str, private_key_file: str) -> server.Serv
 
     hostname = socket.gethostname()
     ip_list = socket.gethostbyname_ex(hostname)[2]
+    username = os.getlogin()
 
     print('正在连接服务器...')
     print(f'IP: {ip}\nusername: {username}\nprivate key file: {private_key_file}')
+    print()
     print(ip_list)
+    print(username)
 
     data_server = server.Server(ip = ip)
 
     try:
         data_server.generate_sftp_client(username = username, private_key_file = private_key_file)
-    except paramiko.ssh_exception.AuthenticationException:
+    except paramiko.ssh_exception.AuthenticationException as ex:
+        print(ex)
         print('登录服务器失败，联系管理员')
         sys.exit(1)
 
