@@ -1,4 +1,4 @@
-# v0.1j9 (master)
+# v0.1j10 (master)
 import sys
 import os.path as path
 import pathlib
@@ -178,10 +178,14 @@ class Server:
                     try:
                         self.total_bytes_int += os.stat(file_str).st_size
                         self.total_count_int += 1
+
+                        total_str = utils.count_to_unit(self.total_bytes_int)
+                        print(f"共 {self.total_bytes_int} 个文件，合计 {total_str}                        ", end = '\r')
                     except Exception as ex:
                         print(ex)
                         continue
 
+        print()
         parent_folder_of_local = path.dirname(local_folder)  # if local_folder = "D:\Program Files\Common Files", parent_folder_of_local would be "D:\Program Files"
         for root_dir_str, child_folder_lst, files_lst in os.walk(local_folder):
             relative_remote_folder_str = root_dir_str[len(parent_folder_of_local):]
