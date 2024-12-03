@@ -136,13 +136,13 @@ def connect_server(ip: str, username: str, private_key_file: str) -> server.Serv
 
     hostname = socket.gethostname()
     ip_list = socket.gethostbyname_ex(hostname)[2]
-    username = getpass.getuser()
+    local_str = getpass.getuser()
 
     print('正在连接服务器...')
     print(f'IP: {ip}\nusername: {username}\nprivate key file: {private_key_file}')
     print()
     print(ip_list)
-    print(username)
+    print(local_str)
 
     data_server = server.Server(ip = ip)
 
