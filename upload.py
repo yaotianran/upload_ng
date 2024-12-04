@@ -136,15 +136,13 @@ def connect_server(ip: str, username: str, private_key_file: str) -> server.Serv
 
     hostname = socket.gethostname()
     ip_list = socket.gethostbyname_ex(hostname)[2]
-    local_str = getpass.getuser()
+    login_str = getpass.getuser()
 
-    print('正在连接服务器...')
-    print(f'IP: {ip}\nusername: {username}\nprivate key file: {private_key_file}')
+    print(f'\n正在连接服务器{ip} ...\nusername: {username}\nprivate key file: {private_key_file}')
     print()
-    print(ip_list)
-    print(local_str)
-    print(path.abspath(sys.argv[0]))
-    print(version)
+    print('本地ip：', ip_list)
+    print('login:', login_str)
+    print(path.abspath(sys.argv[0]), version)
 
     data_server = server.Server(ip = ip)
 

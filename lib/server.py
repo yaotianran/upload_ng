@@ -180,7 +180,7 @@ class Server:
                         self.total_count_int += 1
 
                         total_str = utils.count_to_unit(self.total_bytes_int)
-                        print(f"共 {self.total_bytes_int} 个文件，合计 {total_str}                        ", end = '\r')
+                        print(f"共 {self.total_count_int} 个文件，合计 {total_str}                        ", end = '\r')
                     except Exception as ex:
                         print(ex)
                         continue
