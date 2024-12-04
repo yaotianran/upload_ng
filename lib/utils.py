@@ -1,4 +1,4 @@
-# v0.1k (master)
+# v0.1k1 (master)
 import requests
 import time
 import json
@@ -117,8 +117,8 @@ def generate_remote_data_path(machine_type: str, group: str, machine_tag_str: st
 
     return remote_data_path_str
 
-# 升级， 成功返回0, 不成功返回1
-def self_upgrade(my_server, version: float) -> tuple[int, str]:
+# 升级， 返回 错误代码， exception 字符串，错误信息 for human
+def self_upgrade(my_server, version: float) -> tuple[int, str, str]:
     '''
     silently upgrade
     返回错误代码和信息
@@ -135,10 +135,10 @@ def self_upgrade(my_server, version: float) -> tuple[int, str]:
             my_server.download_a_file(REMOTE_URL + '/upload.py', 'app\\upload.py')
             my_server.download_a_file(REMOTE_URL + '/server.py', 'app\\lib\\server.py')
             my_server.download_a_file(REMOTE_URL + '/utils.py', 'app\\lib\\utils.py')
-            return 1, str(ex) + '   ' + '远程升级失败，本地升级成功'
+            return 1, str(ex), '远程升级失败，本地升级成功'
 
         except Exception as ex:
-            return 98, str(ex) + '   ' + '远程升级失败，本地升级失败'
+            return 98, str(ex), '远程升级失败，本地升级失败'
 
     file_name = URL.split("/")[-1]
     try:
@@ -148,13 +148,13 @@ def self_upgrade(my_server, version: float) -> tuple[int, str]:
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
     except Exception as ex:
-        return 2, str(ex) + '   ' + '远程获取后写入zip失败'
+        return 2, str(ex), '远程获取后写入zip失败'
 
     try:
         with ZipFile(file_name, 'r') as zObject:
             zObject.extractall()
     except Exception as ex:
-        return 3, str(ex) + '   ' + '远程获取后解压zip失败'
+        return 3, str(ex), '远程获取后解压zip失败'
 
     file_replace_lst: list[tuple[str, str], ...] = [('upload_ng-master\\upload.py', 'app\\upload.py'),
                                                     ('upload_ng-master\\upload.bat', 'upload.bat'),
@@ -166,13 +166,13 @@ def self_upgrade(my_server, version: float) -> tuple[int, str]:
         try:
             os.replace(src, dst)
         except Exception as ex:
-            return 4, str(ex) + '   ' + f'解压zip后替换文件{dst}失败'
+            return 4, str(ex), f'解压zip后替换文件{dst}失败'
 
     try:
         os.remove('master.zip')
         shutil.rmtree('upload_ng-master')
     except Exception as ex:
-        return 5, str(ex) + '   ' + f'删除zip失败'
+        return 5, str(ex), '删除zip失败'
 
     # delete old files
     try:
@@ -188,7 +188,7 @@ def self_upgrade(my_server, version: float) -> tuple[int, str]:
         my_server.sftp_client.put('app\\lib\\server.py', REMOTE_URL + '/server.py')
         my_server.sftp_client.put('app\\lib\\utils.py', REMOTE_URL + '/utils.py')
     except Exception as ex:
-        return 6, str(ex) + '   ' + f'升级后上传失败'
+        return 6, str(ex), '升级后上传失败'
 
 
     try:
@@ -196,9 +196,9 @@ def self_upgrade(my_server, version: float) -> tuple[int, str]:
         my_server.sftp_client.chmod(REMOTE_URL + '/server.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
         my_server.sftp_client.chmod(REMOTE_URL + '/utils.py', mode = stat.S_IRUSR + stat.S_IWUSR + stat.S_IRGRP + stat.S_IWGRP + stat.S_IROTH + stat.S_IWOTH)
     except Exception as ex:
-        return 7, str(ex) + '   ' + f'升级后设置远端权限失败'
+        return 7, str(ex), '升级后设置远端权限失败'
 
-    return 0, '远程升级成功'
+    return 0, '', '远程升级成功'
 
 
 if __name__ == '__main__':

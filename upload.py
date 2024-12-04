@@ -1,4 +1,4 @@
-# v0.1k (master)
+# v0.1k1 (master)
 import sys
 import os
 import os.path as path
@@ -10,7 +10,7 @@ import getpass
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1k'
+version = 'v0.1k1'
 
 import requests
 import paramiko
@@ -171,10 +171,10 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     data_server = connect_server('192.168.0.185', username_str, private_key_file)
 
     try:
-        return_code, return_message = utils.self_upgrade(data_server, version)
+        return_code, ex, return_message = utils.self_upgrade(data_server, version)
         # return_code = -1
         # return_message = ''
-        ex = ''
+        # ex = ''
     except Exception as ex:
         return_code = 99
         return_message = '未知错误'
