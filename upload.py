@@ -1,4 +1,4 @@
-# v0.1k1 (master)
+# v0.1k2 (master)
 import sys
 import os
 import os.path as path
@@ -10,7 +10,7 @@ import getpass
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1k1'
+version = 'v0.1k2'
 
 import requests
 import paramiko
@@ -178,6 +178,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     except Exception as ex:
         return_code = 99
         return_message = '未知错误'
+    print('下行测试:', return_code)
 
     try:
         other_dict = {'upload_path': local_path_lst,
@@ -191,7 +192,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
                       'script': path.abspath(argvList[0]),
                       }
         r = utils.upload_information(data_server, other_dict)
-        print(r)
+        print('上行测试:', r)
     except Exception as ex:
         print('upload_information: ', ex)
 
