@@ -165,7 +165,8 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
 
     #
     private_key_file = glob.glob('app\\*_rsa')[0]
-    remote_folder_str = utils.generate_remote_data_path(machine_type_str, private_key_file[4:-4], machine_tag_str)
+    group_str = private_key_file[4:-4]  # 'SLG001' ~ 'SLG012'
+    remote_folder_str = utils.generate_remote_data_path(machine_type_str, group_str, machine_tag_str)
 
 
     data_server = connect_server('192.168.0.185', username_str, private_key_file)
@@ -185,7 +186,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
                       'tag': machine_tag_str,
                       'type': machine_type_str,
                       'version': version,
-                      'group': private_key_file[4:-4],
+                      'group': group_str,
                       'upgrade': return_code,
                       'message': return_message,
                       'exception': str(ex),
@@ -207,8 +208,7 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
             print(message)
         data_server.upload_a_folder(local_path_str, remote_folder_str, pattern = arguments_dict['pattern'])
         try:
-            utils.send_message(machine_type_str, machine_tag_str, path.basename(local_path_str), remote_folder_str, version)
-            pass
+            utils.send_message(machine_type_str, machine_tag_str, path.basename(local_path_str), remote_folder_str, version, group_str)
         except Exception as ex:
             print('send message: ', ex)
 
