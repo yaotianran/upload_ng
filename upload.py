@@ -183,12 +183,12 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
         other_dict = {'upload_path': local_path_lst,
                       'tag': machine_tag_str,
                       'type': machine_type_str,
-                      'version': version,
                       'group': group_str,
                       'upgrade': return_code,
                       'message': return_message,
                       'exception': str(ex),
                       'script': path.abspath(argvList[0]),
+                      'version': version,
                       }
         r = utils.upload_information(data_server, other_dict)
         print('上行测试:', r)
