@@ -1,4 +1,4 @@
-# v0.1k3 (master)
+# v0.1k4 (master)
 import sys
 import os
 import os.path as path
@@ -10,7 +10,7 @@ import getpass
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1k3'
+version = 'v0.1k4'
 
 import requests
 import paramiko
@@ -200,15 +200,18 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     data_server.create_remote_folder(parent_folder = '/', child_folder = remote_folder_str)
     print('服务器数据上传路径： ', remote_folder_str)
 
+    temp_lst = []
     for local_path_str in local_path_lst:
         if 'Res' not in os.listdir(local_path_str) and 'Res1' not in os.listdir(local_path_str):
             message = f'{path.basename(local_path_str)}，该上传目录下无Res，确定这是一个项目文件？'
             print(message)
         data_server.upload_a_folder(local_path_str, remote_folder_str, pattern = arguments_dict['pattern'])
-        try:
-            utils.send_message(machine_type_str, machine_tag_str, path.basename(local_path_str), remote_folder_str, version, group_str)
-        except Exception as ex:
-            print('send message: ', ex)
+        temp_lst.append(path.basename(local_path_str))
+
+    try:
+        utils.send_message(machine_type_str, machine_tag_str, str(temp_lst), remote_folder_str, version, group_str)
+    except Exception as ex:
+        print('send message: ', ex)
 
     data_server.close()
     print(f'\n数据已上传至{remote_folder_str}，按任意键关闭本窗口。\n')
