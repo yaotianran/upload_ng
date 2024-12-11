@@ -143,6 +143,7 @@ def connect_server(ip: str, username: str, private_key_file: str) -> server.Serv
     print('本地ip：', ip_list)
     print('login:', login_str)
     print(path.abspath(sys.argv[0]), version)
+    print()
 
     data_server = server.Server(ip = ip)
 
