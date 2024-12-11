@@ -92,7 +92,7 @@ def send_message(machine_type: str, machine_tag: str, data_dir: str, remote_dir:
     若数据已经传输完成,则把相应信息发送到飞书群里面通知大家可以使用该数据
     """
 
-    msg = f"{get_time_now()} 数据传输完成，测序仪编号：{machine_tag}，测序仪路径：{data_dir}，服务器路径：{remote_dir}"
+    msg = f"{get_time_now()} 数据传输完成\n测序仪编号：{machine_tag}\n测序仪路径：{data_dir}\n服务器路径：{remote_dir}"
     headers = {'Content-Type': 'application/json;charset=utf-8'}
     webhook = 'https://open.feishu.cn/open-apis/bot/v2/hook/3feb487a-e2c3-4ea1-b96f-26e1278489d4'
     data = {
@@ -203,7 +203,7 @@ def self_upgrade(my_server, version: float) -> tuple[int, str, str]:
 
 if __name__ == '__main__':
 
-    # r = send_message('测试测序仪', 'machine_id'， '')
+    r = send_message(machine_type = 'machine_type', machine_tag = 'machine_tag', data_dir = 'data_dir', remote_dir = 'remote_dir')
 
     # local_path = r'E:\NGS\NGS\OutFile\202408291906_Pro004_B_PPH32501170007_PCR3_1_3_WGS_PE150_1000M_23PM'
     # id_to_tag_file = r'..\Pro_id.txt'
