@@ -165,7 +165,7 @@ def connect_server(ip: str, username: str, private_key_file: str) -> server.Serv
                 print('达到最大重连次数，请稍后再试')
                 sys.exit(2)
             print(ex)
-            print(f'连接服务器超时，正在重新连接 第{connect_time_int}次 ......')
+            print(f'连接服务器超时，正在重新连接，第{connect_time_int}次 ......')
 
     return data_server
 
