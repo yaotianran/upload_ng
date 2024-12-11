@@ -1,4 +1,4 @@
-# v0.1k4 (master)
+# v0.1l (master)
 import sys
 import os
 import os.path as path
@@ -10,7 +10,7 @@ import getpass
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1k4'
+version = 'v0.1l'
 
 import requests
 import paramiko
@@ -146,12 +146,23 @@ def connect_server(ip: str, username: str, private_key_file: str) -> server.Serv
 
     data_server = server.Server(ip = ip)
 
-    try:
-        data_server.generate_sftp_client(username = username, private_key_file = private_key_file)
-    except paramiko.ssh_exception.AuthenticationException as ex:
-        print(ex)
-        print('登录服务器失败，联系管理员')
-        sys.exit(1)
+    is_connected = False
+    connect_time_int = 0
+    while not is_connected:
+        try:
+            connect_time_int += 1
+            data_server.generate_sftp_client(username = username, private_key_file = private_key_file)
+            is_connected = True
+        except paramiko.ssh_exception.AuthenticationException as ex:
+            print(ex)
+            print('未通过验证，登录服务器失败，请联系管理员')
+            sys.exit(1)
+        except paramiko.ssh_exception.SSHException as ex:
+            if connect_time_int > 10:
+                print('达到最大重连次数，请稍后再试')
+                sys.exit(2)
+            print(ex)
+            print('连接服务器超时，正在重新连接......')
 
     return data_server
 
