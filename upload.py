@@ -1,4 +1,4 @@
-# v0.1l (master)
+# v0.1l1 (master)
 import sys
 import os
 import os.path as path
@@ -11,7 +11,7 @@ import itertools
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1l'
+version = 'v0.1l1'
 
 import requests
 import paramiko
@@ -214,16 +214,21 @@ def main(argvList = sys.argv, argv_int = len(sys.argv)):
     data_server.create_remote_folder(parent_folder = '/', child_folder = remote_folder_str)
     print('服务器数据上传路径： ', remote_folder_str)
 
-    temp_lst = []
+    data_dir_lst = []
     for local_path_str in local_path_lst:
         if 'Res' not in os.listdir(local_path_str) and 'Res1' not in os.listdir(local_path_str):
             message = f'{path.basename(local_path_str)}，该上传目录下无Res，确定这是一个项目文件？'
             print(message)
         data_server.upload_a_folder(local_path_str, remote_folder_str, pattern = arguments_dict['pattern'])
-        temp_lst.append(path.basename(local_path_str))
+        data_dir_lst.append(path.basename(local_path_str))
+
+
+    data_dir_str = ''
+    for s in data_dir_lst:
+        data_dir_str += f'{s}\n'
 
     try:
-        utils.send_message(machine_type_str, machine_tag_str, str(temp_lst), remote_folder_str, version, group_str)
+        utils.send_message(machine_type_str, machine_tag_str, data_dir_str.strip(), remote_folder_str, version, group_str)
     except Exception as ex:
         print('send message: ', ex)
 
