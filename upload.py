@@ -1,4 +1,4 @@
-# v0.1l1 (master)
+# v0.1l2 (master)
 import sys
 import os
 import os.path as path
@@ -11,7 +11,7 @@ import itertools
 sys.path.append('app\\lib')
 # sys.path.append('lib')
 sys.path.append('python-3.12.7-embed-amd64\\Lib\\site-packages')
-version = 'v0.1l1'
+version = 'v0.1l2'
 
 import requests
 import paramiko
@@ -62,7 +62,7 @@ def get_arguments() -> dict:
         # 上传文件类型
         print()
         print('第二步：是否上传图像文件（数据量大，上传缓慢)，输入y上传，直接按回车不上传')
-        arguments_dict['pattern'] = ['.fastq.gz', '.fq.gz', '.fq', '.fastq', '.md5', '.html', '.exe', '.dll']
+        arguments_dict['pattern'] = ['.fastq.gz', '.fq.gz', '.fq', '.fastq', '.md5', '.html', '.exe', '.dll', '.txt', 'csv', 'xml']
         is_upload_image_str = input('>')
         if is_upload_image_str.upper() in ['Y', 'YES', 'T', 'TRUE', '是']:
             arguments_dict['pattern'].extend(['.tif', '.tiff', '.png', '.TIF', '.TIFF', '.PNG'])
