@@ -1,4 +1,4 @@
-# v0.1l2 (master)
+# v0.1l3 (master)
 import requests
 import time
 import json
@@ -86,21 +86,26 @@ def count_to_unit(count: int, digit = 2) -> str:
     return str(round(num, digit)) + unit
 
 
-# 通过飞书群发送消息，返回http状态码，例如200表示成功
+# 通过飞书群和本地消息服务器发送消息，返回http状态码，例如200表示成功
 def send_message(machine_type: str, machine_tag: str, data_dir: str, remote_dir: str, version: str = '', group: str = '') -> int:
     """
-    若数据已经传输完成,则把相应信息发送到飞书群里面通知大家可以使用该数据
+    若数据已经传输完成,则把相应信息发送到飞书群和本地消息服务器里面，通知大家可以使用该数据
     """
-
-    msg = f"{get_time_now()} 数据传输完成\n测序仪编号：{machine_tag}\n测序仪路径：{data_dir}\n服务器路径：{remote_dir}"
     headers = {'Content-Type': 'application/json;charset=utf-8'}
-    webhook = 'https://open.feishu.cn/open-apis/bot/v2/hook/3feb487a-e2c3-4ea1-b96f-26e1278489d4'
+
+    # 飞书群
+    msg = f"{get_time_now()} 数据传输完成\n测序仪编号：{machine_tag}\n测序仪路径：{data_dir}\n服务器路径：{remote_dir}"
     data = {
         "msg_type": "text",
         "content": {"text": msg},
     }
-    r = requests.post(webhook, headers = headers, data = json.dumps(data))
-    return r.status_code
+    r1 = requests.post('https://open.feishu.cn/open-apis/bot/v2/hook/3feb487a-e2c3-4ea1-b96f-26e1278489d4', headers = headers, data = json.dumps(data))
+
+
+    # 185服务器
+    r2 = requests.post("http://192.168.0.185:9100/api/run/list/", headers = headers, data = json.dumps({"run_id": data_dir, "path": remote_dir}))
+
+    return
 
 # 从本地数据路径，机器号等信息，生成服务器的上传路径，通常上传路径是/share/data/salus/{machine_type}/{group}/{machine_tag}_{machine_UUID}/
 # 例如：/share/data/salus/Pro/group_001/C2201010004_52CB665CC8DAEEFCC4F55811229F3236/
