@@ -94,7 +94,7 @@ def send_message(machine_type: str, machine_tag: str, data_dir: str, remote_dir:
     headers = {'Content-Type': 'application/json;charset=utf-8'}
 
     # 飞书群
-    msg = f"{get_time_now()} 数据传输完成\n测序仪编号：{machine_tag}\n测序仪路径：{data_dir}\n服务器路径：{remote_dir}"
+    msg = f"{get_time_now()} 数据传输完成\n测序仪编号：\n{machine_tag}\n测序仪路径：\n{data_dir}\n服务器路径：\n{remote_dir}"
     data = {
         "msg_type": "text",
         "content": {"text": msg},
